@@ -1,0 +1,21 @@
+Script started on 2022-09-07 20:14:24-04:00 [TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="189" LINES="62"]
+]0;mchenr49@lambda04: /data/drone/mchenr49/yolov5/bin[01;32mmchenr49@lambda04[00m:[01;34m/data/drone/mchenr49/yolov5/bin[00m$ python fold.py [K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kls
+cross-val.py  fold_example  fold.py  [0m[01;32mfold_train.sh[0m  [01;32msave_hyps.py[0m  [01;34mSCRIPT_EXAMPLES[0m  [01;32mtrain.sh[0m  [01;34mwandb[0m
+]0;mchenr49@lambda04: /data/drone/mchenr49/yolov5/bin[01;32mmchenr49@lambda04[00m:[01;34m/data/drone/mchenr49/yolov5/bin[00m$ python fold.py 
+What is the path of the Parent directory to split? ../data/weights/merged_70_5s  6s/
+How many folds should be created? 5
+Creating Fold 1...
+Done!
+Creating Fold 2...
+Done!
+Creating Fold 3...
+Done!
+Creating Fold 4...
+Done!
+Creating Fold 5...
+Done!
+All folds created and stored at: ../data/weights/merged_70_6s/
+]0;mchenr49@lambda04: /data/drone/mchenr49/yolov5/bin[01;32mmchenr49@lambda04[00m:[01;34m/data/drone/mchenr49/yolov5/bin[00m$ [K]0;mchenr49@lambda04: /data/drone/mchenr49/yolov5/bin[01;32mmchenr49@lambda04[00m:[01;34m/data/drone/mchenr49/yolov5/bin[00m$ exit
+exit
+
+Script done on 2022-09-07 20:15:26-04:00 [COMMAND_EXIT_CODE="0"]

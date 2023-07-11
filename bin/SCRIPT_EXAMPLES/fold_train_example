@@ -1,0 +1,66 @@
+Script started on 2022-09-07 20:17:10-04:00 [TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="237" LINES="63"]
+]0;mchenr49@lambda04: /data/drone/mchenr49/yolov5/bin[01;32mmchenr49@lambda04[00m:[01;34m/data/drone/mchenr49/yolov5/bin[00m$ ls [K
+cross-val.py  fold_example  fold.py  [0m[01;32mfold_train.sh[0m  [01;32msave_hyps.py[0m  [01;34mSCRIPT_EXAMPLES[0m  [01;32mtrain.sh[0m  [01;34mwandb[0m
+]0;mchenr49@lambda04: /data/drone/mchenr49/yolov5/bin[01;32mmchenr49@lambda04[00m:[01;34m/data/drone/mchenr49/yolov5/bin[00m$ ./fold_train.sh 
+How many folds are there to train?
+5
+Enter the path of the Master Set (ex: ../data/weights/[MASTER_SET]/): 
+../daat t a/   ta/weights/merged_70_5 6s/
+Enter the batch-size to train with (ex: 16): 
+15 6
+Enter the number of epochs to train with (ex: 300): 
+300
+nohup: appending output to 'nohup.out'
+
+Details for fold1: 
+----------------------------------
+
+
+##################################
+Fold1 training started...
+##################################
+
+nohup: appending output to 'nohup.out'
+
+Details for fold2: 
+----------------------------------
+
+
+##################################
+Fold2 training started...
+##################################
+
+nohup: appending output to 'nohup.out'
+
+Details for fold3: 
+----------------------------------
+
+
+##################################
+Fold3 training started...
+##################################
+
+nohup: appending output to 'nohup.out'
+
+Details for fold4: 
+----------------------------------
+
+
+##################################
+Fold4 training started...
+##################################
+
+nohup: appending output to 'nohup.out'
+
+Details for fold5: 
+----------------------------------
+
+
+##################################
+Fold5 training started...
+##################################
+
+]0;mchenr49@lambda04: /data/drone/mchenr49/yolov5/bin[01;32mmchenr49@lambda04[00m:[01;34m/data/drone/mchenr49/yolov5/bin[00m$ exit
+exit
+
+Script done on 2022-09-07 20:18:10-04:00 [COMMAND_EXIT_CODE="0"]
