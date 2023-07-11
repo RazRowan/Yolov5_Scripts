@@ -7,7 +7,7 @@
 import sys
 import os
 
-# Hyperparameters
+# Parameters
 NUM_FOLD = 5
 
 set_name=input("What is the name of the MASTER_SET being cross-validated?\n")
@@ -21,11 +21,11 @@ MODEL_WEIGHTS = [
 ]
 
 DATA = [
-	"../data/weights/" + set_name + "/Fold1/data.yaml",
-	"../data/weights/" + set_name + "/Fold2/data.yaml",
-	"../data/weights/" + set_name + "/Fold3/data.yaml",
-	"../data/weights/" + set_name + "/Fold4/data.yaml",
-	"../data/weights/" + set_name + "/Fold5/data.yaml"
+	"../data/training_data/" + set_name + "/Fold1/data.yaml",
+	"../data/training_data/" + set_name + "/Fold2/data.yaml",
+	"../data/training_data/" + set_name + "/Fold3/data.yaml",
+	"../data/training_data/" + set_name + "/Fold4/data.yaml",
+	"../data/training_data/" + set_name + "/Fold5/data.yaml"
 ]
 
 # Fix to automatically take these parameters

@@ -7,7 +7,7 @@ hyp_path=$(echo '../data/hyps/hyp.scratch-low.yaml')
 source ../../python_env/bin/activate
 
 # Run the train.py script
-echo "Enter the path of the data (ex: ../data/weights/[DATASET]/): "
+echo "Enter the path of the data (ex: ../data/training_data/[DATASET]/): "
 read data_path
 echo "Enter the batch-size to train with (ex: 64): "
 read batch_size

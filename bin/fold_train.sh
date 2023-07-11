@@ -9,7 +9,7 @@ source ../../python_env/bin/activate
 # Vars needed to train the folds
 echo "How many folds are there to train?"
 read num_folds
-echo "Enter the path of the Master Set (ex: ../data/weights/[MASTER_SET]/): "
+echo "Enter the path of the Master Set (ex: ../data/training_data/[MASTER_SET]/): "
 read master_set_path
 
 # Vars needed to store values used while training
