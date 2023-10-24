@@ -18,7 +18,8 @@ read num_epochs
 
 yaml_path=${data_path}data.yaml
 
-python ../train.py --data $yaml_path  --batch-size=$batch_size --name $run_name --epochs=$num_epochs --hyp $hyp_path
+#nohup python ../train.py --data $yaml_path  --batch-size=$batch_size --name $run_name --epochs=$num_epochs --hyp $hyp_path &
+nohup python ../train.py --data $yaml_path  --batch-size=$batch_size --name $run_name --epochs=$num_epochs --hyp $hyp_path &
 
 # Go to the data.yaml and get the train/test path
 train_path=$(cat $yaml_path | head -n1 | sed -n 's/train: //p')

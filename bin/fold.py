@@ -21,16 +21,16 @@ def saveYaml(path):
     sys.stdout = f
     path = path[1:]
     print("train: " + path + "/train/images")
-    print("val: " + path + "/test/images")
+    print("val: " + path + "/valid/images")
     print()
-    print("nc: 3")
-    print("names: ['berries', 'blue', 'green']")
+    print("nc: 2")
+    print("names: ['blue', 'green']")
     f.close()
     sys.stdout = sys.__stdout__
 
 # Take input
-directory_name=input("What is the path of the Parent directory to split? ")
-num_folds=input("How many folds should be created? ")
+directory_name=input("What is the path of the Parent directory to split? \n>")
+num_folds=input("How many folds should be created? \n>")
 
 # Creating variables to access the images/labels of original dir
 image_dir = directory_name + "train/images/"
@@ -47,7 +47,7 @@ kf = KFold(n_splits = int(num_folds))
 indices = kf.split(image_array)
 
 # For loop to create the folds for each n of splits (see kf above)
-for fold, (train, test) in enumerate(indices):
+for fold, (train, valid) in enumerate(indices):
 
     print("Creating Fold " + str(fold + 1) + "...")
     
@@ -61,14 +61,14 @@ for fold, (train, test) in enumerate(indices):
     os.system("mkdir -p " + train_path_name + "images/")
     os.system("mkdir -p " + train_path_name + "labels/")
     
-    test_path_name = fold_path_name + "/test/"
-    os.system("mkdir -p " + test_path_name)
-    os.system("mkdir -p " + test_path_name + "images/")
-    os.system("mkdir -p " + test_path_name + "labels/")
+    valid_path_name = fold_path_name + "/valid/"
+    os.system("mkdir -p " + valid_path_name)
+    os.system("mkdir -p " + valid_path_name + "images/")
+    os.system("mkdir -p " + valid_path_name + "labels/")
     
     # Save Files in their respective dirs and create a data.yaml
     saveFiles(train, directory_name, train_path_name)
-    saveFiles(test, directory_name, test_path_name)
+    saveFiles(valid, directory_name, valid_path_name)
     saveYaml(fold_path_name)
 
     print("Done!")

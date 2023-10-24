@@ -27,29 +27,34 @@ def YOLOv5ToXYXY(data):
 img_dim = 640
 
 # Path to the YOLOv5 blueberry annotations (directory should contain an images and labels folder that was exported from Roboflow)
-dir_path=input('Path to the valid folder (ex: ../data/validation_data/DATASET): ')
-
+dir_path = input('Path to the dataset folder (ex: ../data/training_data/DATASET/): ')
+type_of_data = input('What kind of dataset is it? (ex: train/valid/test): ')
+folder_name = input('Enter the name of the resulting folder (ex: Merged_80): ')
 #Folder to test
-files = os.listdir(f"{dir_path}/valid/labels")
+files = os.listdir(f"{dir_path}/{type_of_data}/labels")
 
 # Make directory if necessary
 try:
-    os.mkdir(dir_path+"/output_berries")
+    os.mkdir(dir_path + folder_name)
 except Exception as e:
-    print("Note: output_berries directory already exists")
+    print("Note: " + folder_name + " directory already exists")
+
+os.mkdir(dir_path + folder_name + "/" + type_of_data)
+os.mkdir(dir_path + folder_name + "/" + type_of_data + "/images")
+os.mkdir(dir_path + folder_name + "/" + type_of_data + "/labels")
 
 pos = 0 
 
 # Go through each annotation file
 for file in files:  
     pos += 1
-    #print(file)
+    print("Converting " + file + "...")
     
     # Get path to blueberry annotation labels
-    data_path = f'{dir_path}/valid/labels/{file}'
+    data_path = f'{dir_path}/{type_of_data}/labels/{file}'
     
     # Get the current image
-    image = Image.open(f'{dir_path}/valid/images/{file[:-3]}jpg')
+    image = Image.open(f'{dir_path}/{type_of_data}/images/{file[:-3]}jpg')
 
     # Open blueberry annotation file
     with open(data_path, newline='') as csvfile:
@@ -80,7 +85,7 @@ for file in files:
                 #im.save(f"output_berries/empty/{file[:-3]}{i - img_dim}.{j - img_dim}.jpg")
             
             # Save output in YOLOv5 format    
-            with open(dir_path+"/output_berries/labels/{i - img_dim}.{j - img_dim}.{file}", 'w') as f:
+            with open(dir_path + folder_name + "/" + type_of_data + "/labels/" + str(i - img_dim) + "." + str(j - img_dim) + "." + file, 'w') as f:
                 for berry in berries:
                     berry[1] = max(0, berry[1])
                     berry[2] = max(0, berry[2])
@@ -89,4 +94,6 @@ for file in files:
                     f.write(f"{berry[0]} {((berry[3] + berry[1]) / 2 - low_x) * x_scale} {((berry[4] + berry[2]) / 2 - low_y) * y_scale} {(berry[3] - berry[1]) * x_scale} {(berry[4] - berry[2]) * y_scale}\n")    
             
             # Save cropped image
-            im.save(dir_path+"/output_berries/images/{i - img_dim}.{j - img_dim}.{file[:-3]}jpg")
+            im.save(dir_path + folder_name + "/" + type_of_data + "/images/" + str(i - img_dim) + "." + str(j - img_dim) + "." + str(file[:-3]) + "jpg")
+
+print("Finished!")

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+### fold_train.sh allows for conducting multiple training runs for all folds
+### of a specified MAIN set.
+
+### USAGE: ./fold_train.sh
+
 # Variable for the hyperparameters being used
 hyp_path=$(echo '../data/hyps/hyp.scratch-low.yaml')
 
@@ -7,10 +12,10 @@ hyp_path=$(echo '../data/hyps/hyp.scratch-low.yaml')
 source ../../python_env/bin/activate
 
 # Vars needed to train the folds
-echo "How many folds are there to train?"
+echo "How many folds are there to train? "
 read num_folds
-echo "Enter the path of the Master Set (ex: ../data/training_data/[MASTER_SET]/): "
-read master_set_path
+echo "Enter the path of the Main Set (ex: ../data/training_data/[MAIN_SET]/): "
+read main_set_path
 
 # Vars needed to store values used while training
 echo "Enter the batch-size to train with (ex: 16): "
@@ -19,12 +24,12 @@ echo "Enter the number of epochs to train with (ex: 300): "
 read num_epochs
 
 # Additional var for naming Fold dirs
-master_set_name=$(basename $master_set_path)
+main_set_name=$(basename $main_set_path)
 
 for (( i=1; i<=$num_folds; i++ ))
 do
-	run_name=${master_set_name}/Fold${i}
-	fold_path=$master_set_path/Fold${i}/
+	run_name=${main_set_name}/Fold${i}
+	fold_path=$main_set_path/Fold${i}/
 	yaml_path=${fold_path}data.yaml
 
 	nohup python ../train.py --data $yaml_path --batch-size=$batch_size --name $run_name --epochs=$num_epochs --hyp $hyp_path --save-period 50 --device $i  &
@@ -49,6 +54,7 @@ do
 	#echo "----------------------------------" 
 	#printf "\n"
 	#python ./save_hyps.py $fold_path $run_name $total_size $num_epochs "${hyps[@]}"
+
 	##### ^ commented out because save_hyps isn't important right now, can change later
 
 	printf "\n"

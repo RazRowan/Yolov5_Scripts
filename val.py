@@ -286,14 +286,15 @@ def run(
     metric_dir = increment_path(save_dir / "Validation_Metrics.txt", exist_ok=exist_ok)
     with open(metric_dir, "a") as f:
         #print((pf % ('all', seen, nt.sum(), mp, mr, map50, map)), file=f)
-        print(('all,' + seen + "," + nt.sum() + "," + mp + "," + mr + "," + map50 + "," + map + ","), file=f)
+        print(('all,' + str(seen) + "," + str(nt.sum()) + "," + str(mp) + "," + str(mr) + "," + str(map50) + "," + str(map) + ',' + str(conf_thres) + ',' + str(iou_thres)), file=f)
 
     # Print results per class
     if (verbose or (nc < 50 and not training)) and nc > 1 and len(stats):
         for i, c in enumerate(ap_class):
             LOGGER.info(pf % (names[c], seen, nt[c], p[i], r[i], ap50[i], ap[i]))
             with open(metric_dir, "a") as f:
-                print((pf %  (names[c], seen, nt[c], p[i], r[i], ap50[i], ap[i])), file=f)
+                print((names[c] + "," + str(seen) + "," + str(nt[c]) + "," + str(p[i]) + "," + str(r[i]) + "," + str(ap50[i]) + "," + str(ap[i]) + ',' + str(conf_thres) + ',' + str(iou_thres)), file=f)
+                #print((pf %  (names[c], seen, nt[c], p[i], r[i], ap50[i], ap[i])), file=f)
 
     # Print speeds
     t = tuple(x.t / seen * 1E3 for x in dt)  # speeds per image

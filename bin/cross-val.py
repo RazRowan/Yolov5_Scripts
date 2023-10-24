@@ -1,7 +1,9 @@
 ### Cross-val.py runs the val.py script for all of a given set of 
 ### fold weights.
 
-# USAGE: python ./cross-val.py
+### USAGE: python ./cross-val.py
+
+### DEPRECATED, do not use as of 10/11/2023
 
 # Imports
 import sys
@@ -10,7 +12,7 @@ import os
 # Parameters
 NUM_FOLD = 5
 
-set_name=input("What is the name of the MASTER_SET being cross-validated?\n")
+set_name=input("What is the name of the MAIN_SET being cross-validated?\n")
 
 MODEL_WEIGHTS = [
 	"../runs/train/" + set_name + "/Fold1/weights/best.pt",

@@ -1,17 +1,17 @@
-## Cocosplit exports yolo files with three classes [berries, green, blue].
-## This is due to some datasets having the superclass berries show up as its own class.
-## Val.py doesn't work without the classes being the same, so this is a quick fix to
-## move all the yolo labels' class # (the first digit in the yolo txt files) over by 1.
+### Cocosplit exports yolo files with three classes [berries, green, blue].
+### This is due to some datasets having the superclass berries show up as its own class.
+### Val.py doesn't work without the classes being the same, so this is a quick fix to
+### move all the yolo labels' class # (the first digit in the yolo txt files) over by 1.
 
-# USAGE: python yolo_quick_fix.py
+### USAGE: python yolo_quick_fix.py
 
-# Found @ https://stackoverflow.com/questions/61990495/need-to-replace-the-first-words-of-each-line-in-several-text-files
+### Found @ https://stackoverflow.com/questions/61990495/need-to-replace-the-first-words-of-each-line-in-several-text-files
 
 # Imports
 import os
 
 # Get input
-dirname = input("What is the directory name that will be modified? (ex: ../data/validation_data/[DATASET]/[train/valid/test]/labels): ")
+dirname = input("What is the directory name that will be modified? (ex: ../data/validation_data/[DATASET]/[train/valid/test]/labels): \n>")
 
 
 for txt_in in os.listdir(dirname):
