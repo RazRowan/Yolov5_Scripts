@@ -22,6 +22,7 @@ def saveYaml(path):
     path = path[1:]
     print("train: " + path + "/train/images")
     print("val: " + path + "/valid/images")
+    print("test: " + path + "/test/images"
     print()
     print("nc: 2")
     print("names: ['blue', 'green']")
