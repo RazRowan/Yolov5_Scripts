@@ -6,10 +6,11 @@
 ### USAGE: ./fold_train.sh
 
 # Variable for the hyperparameters being used
-hyp_path=$(echo '../data/hyps/hyp.scratch-low.yaml')
+hyp_path=$(echo '/data/drone/'"$USER"'/yolov5/data/hyps/hyp.scratch-low.yaml')
 
 # Source Chau's python environment
-source ../../python_env/bin/activate
+venv_path=$(echo '/data/drone/'"$USER"'/python_env2/bin/activate')
+source "$venv_path"
 
 # Vars needed to train the folds
 echo "How many folds are there to train? "
@@ -32,7 +33,7 @@ do
 	fold_path=$main_set_path/Fold${i}/
 	yaml_path=${fold_path}data.yaml
 
-	nohup python ../train.py --data $yaml_path --batch-size=$batch_size --name $run_name --epochs=$num_epochs --hyp $hyp_path --save-period 50 --device $i  &
+	nohup python /data/drone/"$USER"/yolov5/train.py --data $yaml_path --batch-size=$batch_size --name $run_name --epochs=$num_epochs --hyp $hyp_path --save-period 50  &
 
 	# Go to the data.yaml and get the train/test path
 	train_path=$(cat $yaml_path | head -n1 | sed -n 's/train: //p')
