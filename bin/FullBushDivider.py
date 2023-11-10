@@ -55,14 +55,15 @@ except Exception as e:
 folders = ['train', 'valid', 'test']
 
 for folder in folders:
-    os.makedirs(new_dir_path + folder_name + "/" + folder + "/images")
-    os.makedirs(new_dir_path + folder_name + "/" + folder + "/labels")
-
     # Folder to test
     if not os.path.exists(f"{dir_path}/{folder}/labels"):
+        print(f"There are no labels in the {folder} folder")
         continue
     files = os.listdir(f"{dir_path}/{folder}/labels")
     pos = 0
+
+    os.makedirs(new_dir_path + folder_name + "/" + folder + "/images")
+    os.makedirs(new_dir_path + folder_name + "/" + folder + "/labels")
 
     # Go through each annotation file
     for file in files:
@@ -73,7 +74,12 @@ for folder in folders:
         data_path = f'{dir_path}/{folder}/labels/{file}'
 
         # Get the current image
-        image = Image.open(f'{dir_path}/{folder}/images/{file[:-3]}jpg')
+        if file.endswith(".jpg"):
+            image = Image.open(f'{dir_path}/{folder}/images/{file[:-3]}jpg')
+        elif file.endswith(".JPG"):
+            image = Image.open(f'{dir_path}/{folder}/images/{file[:-3]}JPG')
+        else:
+            continue
 
         # Open blueberry annotation file
         with open(data_path, newline='') as csvfile:
