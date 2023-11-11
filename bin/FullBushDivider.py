@@ -59,7 +59,7 @@ for folder in folders:
     if not os.path.exists(f"{dir_path}/{folder}/labels"):
         print(f"There are no labels in the {folder} folder")
         continue
-    files = os.listdir(f"{dir_path}/{folder}/labels")
+    files = os.listdir(f"{dir_path}/{folder}/images")
     pos = 0
 
     os.makedirs(new_dir_path + folder_name + "/" + folder + "/images")
@@ -68,18 +68,19 @@ for folder in folders:
     # Go through each annotation file
     for file in files:
         pos += 1
-        print("Converting " + file + "...")
+        print("Converting " + str(file) + "...")
 
         # Get path to blueberry annotation labels
-        data_path = f'{dir_path}/{folder}/labels/{file}'
+        data_path = f'{dir_path}/{folder}/labels/{file[:-3]}txt'
 
         # Get the current image
-        if file.endswith(".jpg"):
-            image = Image.open(f'{dir_path}/{folder}/images/{file[:-3]}jpg')
-        elif file.endswith(".JPG"):
-            image = Image.open(f'{dir_path}/{folder}/images/{file[:-3]}JPG')
-        else:
-            continue
+        image = Image.open(f'{dir_path}/{folder}/images/{file}')
+        #if file.endswith(".jpg"):
+         #   image = Image.open(f'{dir_path}/{folder}/images/{file[:-3]}jpg')
+        #elif file.endswith(".JPG"):
+        #    image = Image.open(f'{dir_path}/{folder}/images/{file[:-3]}JPG')
+        #else:
+        #    continue
 
         # Open blueberry annotation file
         with open(data_path, newline='') as csvfile:
@@ -110,7 +111,7 @@ for folder in folders:
                     #im.save(f"output_berries/empty/{file[:-3]}{i - img_dim}.{j - img_dim}.jpg")
 
                 # Save output in YOLOv5 format
-                with open(new_dir_path + folder_name + "/" + folder + "/labels/" + str(i - img_dim) + "." + str(j - img_dim) + "." + file, 'w') as f:
+                with open(new_dir_path + folder_name + "/" + folder + "/labels/" + str(i - img_dim) + "." + str(j - img_dim) + "." + file[:-3] + "txt", 'w') as f:
                     for berry in berries:
                         berry[1] = max(0, berry[1])
                         berry[2] = max(0, berry[2])
@@ -119,7 +120,7 @@ for folder in folders:
                         f.write(f"{berry[0]} {((berry[3] + berry[1]) / 2 - low_x) * x_scale} {((berry[4] + berry[2]) / 2 - low_y) * y_scale} {(berry[3] - berry[1]) * x_scale} {(berry[4] - berry[2]) * y_scale}\n")    
 
                 # Save cropped image
-                im.save(new_dir_path + folder_name + "/" + folder + "/images/" + str(i - img_dim) + "." + str(j - img_dim) + "." + str(file[:-3]) + "jpg")
+                im.save(new_dir_path + folder_name + "/" + folder + "/images/" + str(i - img_dim) + "." + str(j - img_dim) + "." + str(file))
 
     print("Finished with " + folder + " !")
 

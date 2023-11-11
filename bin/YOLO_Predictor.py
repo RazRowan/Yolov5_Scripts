@@ -54,7 +54,7 @@ if change_parameters == "y":
 # Else case is essentially the default value. If you want to save time, change the values here.
 else: 
     # Defining weight file path
-    weight_path = f'/data/drone/{get_username()}/yolov5/runs/train/Macrie_iPhoneThanh_6_2022_DUKE_640x640/Fold1/weights/best.pt'
+    weight_path = f'/data/drone/{get_username()}/yolov5/runs/train/Test_Export_640x640_300-epochs/weights/best.pt'
 
     # Loading the model
     model = torch.hub.load(repo_or_dir='ultralytics/yolov5',
@@ -77,7 +77,7 @@ else:
     result_path = f"/data/drone/{get_username()}/yolov5/predictions/results/"
 
     # Name of the directory containing the results
-    result_dir_dataset = "Macrie_iPhoneThanh_6_2022_DUKE_640x640"
+    result_dir_dataset = "Test_Export_640x640_300-epochs"
     result_dir = result_path + result_dir_dataset + "_c" + str(model.conf) + "_i" + str(model.iou)
 
     # Inference size

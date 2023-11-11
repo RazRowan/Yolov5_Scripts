@@ -6,6 +6,8 @@
 # Imports
 import sys
 import os
+import random
+import string
 import numpy as np
 from sklearn.model_selection import KFold
 
@@ -29,9 +31,30 @@ def saveYaml(path):
     f.close()
     sys.stdout = sys.__stdout__
 
+# Generates a random seed, taking in a project name and length for the seed
+def random_seed(project_name, length):
+    # Define the characters that will be used
+    characters = string.digits
+
+    # Generate the random seed string
+    seed_string = ''.join(random.choice(characters) for i in range(length))
+
+    # Write seed to file
+    with open(project_name + "_fold-random-seed", 'w') as f:
+        f.write(seed_string)
+    f.close()
+
+    return seed_string
+
 # Take input
 directory_name=input("What is the path of the Parent directory to split? (ex: ../data/training_data/[DATASET]/ \n>")
 num_folds=input("How many folds should be created? (ex: 5) \n>")
+
+# Get seed for random assignment
+seed = int(input("Please enter a seed for the random assignment (or -1 for new seed): "))
+if seed == -1:
+    seed = int(random_seed(os.path.basename(directory_name[:-1]), 8))
+print("Using (" + str(seed) + ") as the random seed.")
 
 # Creating variables to access the images/labels of original dir
 image_dir = directory_name + "train/images/"
@@ -44,7 +67,7 @@ label_array = sorted(os.listdir(label_dir))
 ### Use KFold and kf.split to split the image_array into indices.
 # The folding works by splitting the array into n lists of indices
 # that are evenly split. See sklearn KFold documentation for more.
-kf = KFold(n_splits = int(num_folds))
+kf = KFold(n_splits=int(num_folds), shuffle=True, random_state=seed)
 indices = kf.split(image_array)
 
 # For loop to create the folds for each n of splits (see kf above)
