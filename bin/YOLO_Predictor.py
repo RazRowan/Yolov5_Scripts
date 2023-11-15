@@ -19,7 +19,7 @@ def get_username():
 change_parameters = input("Do you want to use different parameters for this run? (y/n)\n>")
 if change_parameters == "y":
     # Defining weight file path
-    weight_path = input("What is the path to the weight file you want to use?\n>")
+    weight_path = input("What is the path to the weight file you want to use? (relative path (ex: ../path/to/run/folder/best.pt) or full path)\n>")
 
     # Loading the model
     model = torch.hub.load(repo_or_dir='ultralytics/yolov5',
@@ -38,10 +38,10 @@ if change_parameters == "y":
         model.hide_conf = True if input("Enable model.hide_conf? (no default)\n>") == "True" else False
 
     # Path to the directory of images to make predictions on
-    image_dir_path = input("What is the path to the images you want to make predictions on?\n>")
+    image_dir_path = input("What is the path to the images you want to make predictions on? (ex: /data/drone/NAME/yolov5/predictions/datasets/)\n>")
 
     # Path to the directory you want to put the results
-    result_path = input("Where would you like to send the results to? (ex: /data/drone/NAME/yolov5/predictions/)\n>")
+    result_path = input("Where would you like to send the results to? (ex: /data/drone/NAME/yolov5/predictions/results/)\n>")
 
     # Name of the directory containing the results
     result_dir_dataset = input("What is the name you want to give to this run? "

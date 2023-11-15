@@ -8,8 +8,8 @@ venv_path=$(echo '/data/drone/'"$USER"'/python_env2/bin/activate')
 source "$venv_path"
 
 # Run the train.py script
-echo "Enter the path of the data (ex: ../data/training_data/[DATASET]/): "
-read data_path
+echo "Enter the path of the data.yaml (relative path (ex: ../path/to/dataset/folder/data.yaml) or full path): "
+read yaml_path
 echo "Enter the batch-size to train with (ex: 64): "
 read batch_size
 echo "Enter the name of this training run: "
@@ -17,7 +17,6 @@ read run_name
 echo "Enter the number of epochs to train with (ex: 300): "
 read num_epochs
 
-yaml_path=${data_path}data.yaml
 
 #nohup python ../train.py --data $yaml_path  --batch-size=$batch_size --name $run_name --epochs=$num_epochs --hyp $hyp_path &
 nohup python /data/drone/"$USER"/yolov5/train.py --data $yaml_path  --batch-size=$batch_size --name $run_name --epochs=$num_epochs --hyp $hyp_path &

@@ -30,9 +30,10 @@ def assign(path_to_project, dataset_folder, per_train, per_valid, per_test):
         img_files = os.listdir(path + "/images/")
 
         # For as many as we're moving based on the percent of files we want to move
-        for i in range(num_to_move):
+        #for i in range(num_to_move):
+        for file in random.sample(list(img_files), num_to_move):
             # Grab random image file
-            file = random.choice(img_files)
+            #file = random.choice(img_files)
 
             # Define paths for image files in order to move them
             src_img_file = os.path.join(path+ "/images/", file)
@@ -85,7 +86,11 @@ def assign(path_to_project, dataset_folder, per_train, per_valid, per_test):
     # Get seed for random assignment
     seed = input("Please enter a seed for the random assignment (or -1 for new seed): ")
     if seed == "-1":
-        seed = random_seed(os.path.basename(path_to_project), 8)
+        if path_to_project[-1] == "/":
+           dataset_name = os.path.basename(path_to_project[:-1])
+        else:
+           dataset_name = os.path.basename(path_to_project)
+        seed = random_seed(dataset_name, 8)
     print("Using (" + str(seed) + ") as the random seed.")
 
     # Seed our random
@@ -109,9 +114,12 @@ def assign(path_to_project, dataset_folder, per_train, per_valid, per_test):
         path_to_new_folder = path_to_project + "/test/"
         move_files(path_to_dataset, path_to_new_folder, num_test)
 
+    print("If you assigned some data to the train & valid folder, you COULD start training.")
+    print("NOTE: If you have not used the FullBushDivider.py script, please do that before training!")
+
 
 # Run the main program with these parameters
-project_folder = input("What is the path of the project folder? (Ex: ./path/to/dataset/folder/) \n>")
+project_folder = input("What is the path of the project folder? (relative path (ex: ../path/to/dataset/folder/) or full path) \n>")
 dataset_folder = input("What folder holds all the data? (Ex: train, valid, or test) \n>")
 percent_train = int(input("What percentage of the data should the train folder have? \n>"))
 percent_valid = int(input("What percentage of the data should the valid folder have? \n>"))

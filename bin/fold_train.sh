@@ -13,7 +13,7 @@ venv_path=$(echo '/data/drone/'"$USER"'/python_env2/bin/activate')
 source "$venv_path"
 
 # Vars needed to train the folds
-echo "How many folds are there to train? "
+echo "How many folds are there to train? (usually between 5-10): "
 read num_folds
 echo "Enter the path of the Main Set (ex: ../data/training_data/[MAIN_SET]/): "
 read main_set_path
@@ -40,23 +40,6 @@ do
 	train_path=$(echo '.'"$train_path")
 	test_path=$(cat $yaml_path | head -n2 | sed -n 's/val: //p')
 	test_path=$(echo '.'"$test_path")
-
-	# Count up the amount of images in the data set
-	#train_size=$(cd $train_path && ( ls | wc -l))
-	#test_size=$(cd $test_path && ( ls | wc -l))
-	#total_size=$(expr $train_size + $test_size)
-
-	#hyps=()
-	#while IFS= read -r line; do
-	#  hyps+=("$line")
-	#done < <(tail -n29 $hyp_path)
-
-	#printf "\nDetails for fold${i}: \n"
-	#echo "----------------------------------" 
-	#printf "\n"
-	#python ./save_hyps.py $fold_path $run_name $total_size $num_epochs "${hyps[@]}"
-
-	##### ^ commented out because save_hyps isn't important right now, can change later
 
 	printf "\n"
 	echo "##################################"

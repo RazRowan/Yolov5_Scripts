@@ -98,5 +98,5 @@ for fold, (train, valid) in enumerate(indices):
     print("Done!")
 
 print("All folds created and stored at: " + directory_name)
-
+print("You should be ready to run the fold_train.sh script!")
 

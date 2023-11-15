@@ -9,6 +9,10 @@ import os
 import csv
 from PIL import Image
 import sys
+import pwd
+
+def get_username():
+    return pwd.getpwuid(os.getuid())[0]
 
 # Converts YOLOv5 data to XYXY coordinates
 def YOLOv5ToXYXY(data):
@@ -25,13 +29,13 @@ def YOLOv5ToXYXY(data):
     return newdata
 
 # Creates a data.yaml file (needed for train.py)
-def saveYaml(path):
-    f = open(path + "/data.yaml", 'w')
+def saveYaml(dataset_name):
+    path = "/data/training_data/" + dataset_name
+    f = open(f"/data/drone/{get_username()}/yolov5{path}/data.yaml", 'w')
     sys.stdout = f
-    path = path[1:]
-    print("train: " + path + "/train/images")
-    print("val: " + path + "/valid/images")
-    print("test: " + path + "/test/images")
+    print("train: ." + path + "/train/images")
+    print("val: ." + path + "/valid/images")
+    print("test: ." + path + "/test/images")
     print()
     print("nc: 2")
     print("names: ['blue', 'green']")
@@ -42,11 +46,15 @@ def saveYaml(path):
 img_dim = 640
 
 # Path to the YOLOv5 blueberry annotations (directory should contain an images and labels folder that was exported from Roboflow)
-dir_path = input('Path to the dataset folder (ex: ../data/training_data/DATASET): ')
+dir_path = input('Path to the dataset folder (relative path (ex: ../path/to/dataset/folder/) or full path): ')
 folder_name = input('Enter the name of the resulting folder (ex: Merged_80): ')
 
 # Make directory if necessary
-new_dir_path = os.path.dirname(dir_path) + "/"
+if dir_path[-1] == "/":
+    new_dir_path = os.path.dirname(dir_path[:-1])
+else:
+    new_dir_path = os.path.dirname(dir_path) + "/"
+
 try:
     os.mkdir(new_dir_path + folder_name)
 except Exception as e:
@@ -57,7 +65,9 @@ folders = ['train', 'valid', 'test']
 for folder in folders:
     # Folder to test
     if not os.path.exists(f"{dir_path}/{folder}/labels"):
-        print(f"There are no labels in the {folder} folder")
+        print("----------------------------------------------")
+        print(f"There are no labels in the {folder} folder...")
+        print("----------------------------------------------")
         continue
     files = os.listdir(f"{dir_path}/{folder}/images")
     pos = 0
@@ -75,12 +85,6 @@ for folder in folders:
 
         # Get the current image
         image = Image.open(f'{dir_path}/{folder}/images/{file}')
-        #if file.endswith(".jpg"):
-         #   image = Image.open(f'{dir_path}/{folder}/images/{file[:-3]}jpg')
-        #elif file.endswith(".JPG"):
-        #    image = Image.open(f'{dir_path}/{folder}/images/{file[:-3]}JPG')
-        #else:
-        #    continue
 
         # Open blueberry annotation file
         with open(data_path, newline='') as csvfile:
@@ -121,7 +125,10 @@ for folder in folders:
 
                 # Save cropped image
                 im.save(new_dir_path + folder_name + "/" + folder + "/images/" + str(i - img_dim) + "." + str(j - img_dim) + "." + str(file))
-
+    print("------------------------------")
     print("Finished with " + folder + " !")
+    print("------------------------------")
+print("If there is validation data for this dataset, this dataset is now ready to train!")
+print("If you are doing cross-validation, you should now split this dataset with the fold.py script.")
 
-saveYaml(new_dir_path + folder_name)
+saveYaml(folder_name)
