@@ -21,7 +21,8 @@ def saveFiles(fold_set, original_path, new_path):
 def saveYaml(path):
     f = open(path + "/data.yaml", 'w')
     sys.stdout = f
-    path = path[1:]
+    if path[1] == ".":
+        path = path[1:]
     print("train: " + path + "/train/images")
     print("val: " + path + "/valid/images")
     print("test: " + path + "/test/images")
