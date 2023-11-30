@@ -51,7 +51,7 @@ folder_name = input('Enter the name of the resulting folder (ex: Merged_80): ')
 
 # Make directory if necessary
 if dir_path[-1] == "/":
-    new_dir_path = os.path.dirname(dir_path[:-1])
+    new_dir_path = os.path.dirname(dir_path[:-1]) + "/"
 else:
     new_dir_path = os.path.dirname(dir_path) + "/"
 
