@@ -10,6 +10,13 @@ import random
 import string
 import numpy as np
 from sklearn.model_selection import KFold
+import configparser
+
+# Read the current brightness from the config file
+config = configparser.ConfigParser()
+config.read('config.ini')
+yolov5_path = config.get('paths', 'yolov5_path')
+training_data_path = config.get('paths', 'training_data_path')
 
 # Saves either images or labels from the original directory to the new fold directory    
 def saveFiles(fold_set, original_path, new_path):
@@ -48,18 +55,19 @@ def random_seed(project_name, length):
     return seed_string
 
 # Take input
-directory_name=input("What is the path of the Parent directory to split? (ex: ../data/training_data/[DATASET]/ \n>")
+directory_name=input("What is the name of the dataset to split? (ex: ../data/training_data/[DATASET]/ \n>")
+dataset_path=f"{training_data_path}{directory_name}/"
 num_folds=input("How many folds should be created? (ex: 5) \n>")
 
 # Get seed for random assignment
 seed = int(input("Please enter a seed for the random assignment (or -1 for new seed): "))
 if seed == -1:
-    seed = int(random_seed(os.path.basename(directory_name[:-1]), 8))
+    seed = int(random_seed(directory_name), 8)
 print("Using (" + str(seed) + ") as the random seed.")
 
 # Creating variables to access the images/labels of original dir
-image_dir = directory_name + "train/images/"
-label_dir = directory_name + "train/labels/"
+image_dir = dataset_path + "train/images/"
+label_dir = dataset_path + "train/labels/"
 
 # Sort the files listen in these dirs
 image_array = sorted(os.listdir(image_dir))
@@ -77,7 +85,7 @@ for fold, (train, valid) in enumerate(indices):
     print("Creating Fold " + str(fold + 1) + "...")
 
     # Create directories for each Fold
-    fold_path_name = directory_name + "Fold" + str(fold + 1)
+    fold_path_name = dataset_path + "Fold" + str(fold + 1)
     os.system("mkdir -p " + fold_path_name)
 
     # Create directories for train and test
@@ -92,12 +100,12 @@ for fold, (train, valid) in enumerate(indices):
     os.system("mkdir -p " + valid_path_name + "labels/")
 
     # Save Files in their respective dirs and create a data.yaml
-    saveFiles(train, directory_name, train_path_name)
-    saveFiles(valid, directory_name, valid_path_name)
+    saveFiles(train, dataset_path, train_path_name)
+    saveFiles(valid, dataset_path, valid_path_name)
     saveYaml(fold_path_name)
 
     print("Done!")
 
-print("All folds created and stored at: " + directory_name)
-print("You should be ready to run the fold_train.sh script!")
+print(f"All folds created and stored at: {dataset_path}")
+print("You should be ready to run the fold_train.py script!")
 

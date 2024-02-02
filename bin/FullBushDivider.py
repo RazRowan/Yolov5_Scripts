@@ -10,6 +10,12 @@ import csv
 from PIL import Image
 import sys
 import pwd
+import configparser
+
+# Read the current brightness from the config file
+config = configparser.ConfigParser()
+config.read('config.ini')
+training_data_path = config.get('paths', 'training_data_path')
 
 def get_username():
     return pwd.getpwuid(os.getuid())[0]
@@ -30,8 +36,8 @@ def YOLOv5ToXYXY(data):
 
 # Creates a data.yaml file (needed for train.py)
 def saveYaml(dataset_name):
-    path = "/data/training_data/" + dataset_name
-    f = open(f"/data/drone/{get_username()}/yolov5{path}/data.yaml", 'w')
+    path = f"{training_data_path}{dataset_name}"
+    f = open(f"{path}/data.yaml", 'w')
     sys.stdout = f
     print("train: ." + path + "/train/images")
     print("val: ." + path + "/valid/images")

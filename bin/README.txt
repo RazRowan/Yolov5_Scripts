@@ -2,21 +2,21 @@
 
 ## Normal Process - Folding, training, then cross-validation
 1. fold.py
-2. fold-train.sh
+2. fold-train.py
 3. cross-val.py *
 
 * DEPRECATED, do not use as of 10/11/2023
 
 ## Single Train - Folding, then training
-1. dataset_assigner.py
+1. dataset_assigner.py **
 2. FullBushDivider.py
-3. train.sh
+3. Train.py
 
-* Only needed if the data being trained has no validation/testing set
+** Only needed if the data being trained has no validation/testing set
 
 ## Validation Testing Scripts
-- easy_val.py
-- quick_val.py
+- easy_val.py - Makes using val.py a bit easier
+- quick_val.py - Performs MANY validation tests en masse
 
 ## Other Scripts
 - YOLO_Predictor.py - Used to make predictions with a weight file

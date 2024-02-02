@@ -15,6 +15,11 @@ import numpy as np
 def get_username():
     return pwd.getpwuid(os.getuid())[0]
 
+# Read the current brightness from the config file
+config = configparser.ConfigParser()
+config.read('config.ini')
+yolov5_path = config.get('paths', 'yolov5_path')
+
 # INPUTS
 change_parameters = input("Do you want to use different parameters for this run? (y/n)\n>")
 if change_parameters == "y":
@@ -38,10 +43,10 @@ if change_parameters == "y":
         model.hide_conf = True if input("Enable model.hide_conf? (no default)\n>") == "True" else False
 
     # Path to the directory of images to make predictions on
-    image_dir_path = input("What is the path to the images you want to make predictions on? (ex: /data/drone/NAME/yolov5/predictions/datasets/)\n>")
+    image_dir_path = input("What is the path (from yolov5 repo) to the images you want to make predictions on? (ex: predictions/datasets/)\n>")
 
     # Path to the directory you want to put the results
-    result_path = input("Where would you like to send the results to? (ex: /data/drone/NAME/yolov5/predictions/results/)\n>")
+    result_path = input("Where would you like to send the results to? (ex: {yolov5_path}/predictions/results/)\n>")
 
     # Name of the directory containing the results
     result_dir_dataset = input("What is the name you want to give to this run? "
@@ -54,7 +59,7 @@ if change_parameters == "y":
 # Else case is essentially the default value. If you want to save time, change the values here.
 else: 
     # Defining weight file path
-    weight_path = f'/data/drone/{get_username()}/yolov5/runs/train/Test_Export_640x640_300-epochs/weights/best.pt'
+    weight_path = f'{yolov5_path}/runs/train/Test_Export_640x640_300-epochs/weights/best.pt'
 
     # Loading the model
     model = torch.hub.load(repo_or_dir='ultralytics/yolov5',
@@ -71,10 +76,10 @@ else:
     model.hide_conf = False  # Hide the confidence labels on finished predictions
 
     # Path to the directory of images to make predictions on
-    image_dir_path = f"/data/drone/{get_username()}/yolov5/predictions/datasets/P3-Prediction-Image/"
+    image_dir_path = f"{yolov5_path}predictions/datasets/P3-Prediction-Image/"
 
     # Path to the directory you want to put the results
-    result_path = f"/data/drone/{get_username()}/yolov5/predictions/results/"
+    result_path = f"{yolov5_path}predictions/results/"
 
     # Name of the directory containing the results
     result_dir_dataset = "Test_Export_640x640_300-epochs"

@@ -7,6 +7,13 @@ import os
 import shutil
 import random
 import string
+import configparser
+
+# Read the current brightness from the config file
+config = configparser.ConfigParser()
+config.read('config.ini')
+yolov5_path = config.get('paths', 'yolov5_path')
+training_data_path = config.get('paths', 'training_data_path')
 
 def random_seed(project_name, length):
     # Define the characters that will be used
@@ -119,7 +126,7 @@ def assign(path_to_project, dataset_folder, per_train, per_valid, per_test):
 
 
 # Run the main program with these parameters
-project_folder = input("What is the path of the project folder? (relative path (ex: ../path/to/dataset/folder/) or full path) \n>")
+project_folder = training_data_path + input("What is the name of the dataset? \n>")
 dataset_folder = input("What folder holds all the data? (Ex: train, valid, or test) \n>")
 percent_train = int(input("What percentage of the data should the train folder have? \n>"))
 percent_valid = int(input("What percentage of the data should the valid folder have? \n>"))
