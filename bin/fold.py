@@ -55,14 +55,14 @@ def random_seed(project_name, length):
     return seed_string
 
 # Take input
-directory_name=input("What is the name of the dataset to split? (ex: ../data/training_data/[DATASET]/ \n>")
+directory_name=input("What is the name of the dataset to split? \n>")
 dataset_path=f"{training_data_path}{directory_name}/"
 num_folds=input("How many folds should be created? (ex: 5) \n>")
 
 # Get seed for random assignment
 seed = int(input("Please enter a seed for the random assignment (or -1 for new seed): "))
 if seed == -1:
-    seed = int(random_seed(directory_name), 8)
+    seed = int(random_seed(directory_name, 8))
 print("Using (" + str(seed) + ") as the random seed.")
 
 # Creating variables to access the images/labels of original dir
