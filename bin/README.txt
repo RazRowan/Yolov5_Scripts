@@ -1,5 +1,7 @@
 ### Open scripts up in a text editor for more information about the scripts, and how to use them.
 
+# NOTE: Change config.ini values to match your path names!!!
+
 ## Normal Process - Folding, training, then cross-validation
 1. fold.py
 2. fold-train.py
