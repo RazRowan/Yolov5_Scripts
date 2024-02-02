@@ -7,10 +7,22 @@
 import sys
 import os
 import numpy as np
+import configparser
+import print_dir
+
+# Read the current brightness from the config file
+config = configparser.ConfigParser()
+config.read('config.ini')
+validation_data_path = config.get('paths', 'validation_data_path')
+train_run_path = config.get('paths', 'train_run_path')
+num_of_files = int(config.get('parameters', 'default_num_of_files'))
+
+# Print most recent files in validation_data directory
+print_dir.print_files_path(path=validation_data_path, num_of_files=num_of_files)
 
 # Paths input
-validation_path=input("Enter the path of the validation set being used (ex: ../data/validation_data/[DATASET]/data.yaml): \n>")
-weight_path=input("Enter the path of the weight file being used (ex: ../runs/train/[DATASET]/[FOLD#]/weights/best.pt): \n>")
+validation_path= validation_data_path + input("What is the name of the validation dataset you want to use? \n>") + "/data.yaml"
+weight_path= train_run_path + input("Enter the path of the weight file being used (from /runs/train/, ex: [DATASET]/[FOLD#]/): \n>") + "weights/best.pt"
 
 # Parameters input
 img_size=int(input("Enter the inference image size: (ex: 3200): \n>"))

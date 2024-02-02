@@ -11,12 +11,14 @@ import string
 import numpy as np
 from sklearn.model_selection import KFold
 import configparser
+import print_dir
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
 config.read('config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
 training_data_path = config.get('paths', 'training_data_path')
+num_of_files = int(config.get('parameters', 'default_num_of_files'))
 
 # Saves either images or labels from the original directory to the new fold directory    
 def saveFiles(fold_set, original_path, new_path):
@@ -54,8 +56,11 @@ def random_seed(project_name, length):
 
     return seed_string
 
+# Print most recent files in training_data directory
+print_dir.print_files_path(path=training_data_path, num_of_files=num_of_files)
+
 # Take input
-directory_name=input("What is the name of the dataset to split? (ex: ../data/training_data/[DATASET]/ \n>")
+directory_name=input("What is the name of the dataset to split? \n>")
 dataset_path=f"{training_data_path}{directory_name}/"
 num_folds=input("How many folds should be created? (ex: 5) \n>")
 

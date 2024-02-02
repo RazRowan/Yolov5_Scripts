@@ -11,11 +11,13 @@ from PIL import Image
 import sys
 import pwd
 import configparser
+import print_dir
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
 config.read('config.ini')
 training_data_path = config.get('paths', 'training_data_path')
+num_of_files = int(config.get('parameters', 'default_num_of_files'))
 
 def get_username():
     return pwd.getpwuid(os.getuid())[0]
@@ -51,15 +53,15 @@ def saveYaml(dataset_name):
 # Size to divide image into
 img_dim = 640
 
+# Print most recent files in training_data directory
+print_dir.print_files_path(path=training_data_path, num_of_files=num_of_files)
+
 # Path to the YOLOv5 blueberry annotations (directory should contain an images and labels folder that was exported from Roboflow)
-dir_path = input('Path to the dataset folder (relative path (ex: ../path/to/dataset/folder/) or full path): ')
-folder_name = input('Enter the name of the resulting folder (ex: Merged_80): ')
+dir_path = training_data_path + input('What is the dataset you want to split into tiles? \n>')
+folder_name = input('Enter the name of the resulting folder (ex: Merged_80): \n>')
 
 # Make directory if necessary
-if dir_path[-1] == "/":
-    new_dir_path = os.path.dirname(dir_path[:-1]) + "/"
-else:
-    new_dir_path = os.path.dirname(dir_path) + "/"
+new_dir_path = os.path.dirname(dir_path) + "/"
 
 try:
     os.mkdir(new_dir_path + folder_name)
