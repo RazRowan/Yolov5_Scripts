@@ -41,9 +41,9 @@ def saveYaml(dataset_name):
     path = f"{training_data_path}{dataset_name}"
     f = open(f"{path}/data.yaml", 'w')
     sys.stdout = f
-    print("train: ." + path + "/train/images")
-    print("val: ." + path + "/valid/images")
-    print("test: ." + path + "/test/images")
+    print("train: " + path + "/train/images")
+    print("val: " + path + "/valid/images")
+    print("test: " +path + "/test/images")
     print()
     print("nc: 2")
     print("names: ['blue', 'green']")

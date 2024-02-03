@@ -26,4 +26,5 @@ run_name=input("Enter the name of this training run: \n>")
 num_epochs=input("Enter the number of epochs to train with (ex: 300): \n")
 
 # Run the train.py with inputs as parameters
-os.system('nohup python {yolov5_path}train.py --data {yaml_path}  --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --hyp {hyp_path} &')
+#os.system('nohup python {yolov5_path}train.py --data {yaml_path}  --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --hyp {hyp_path} &')
+os.system(f'python {yolov5_path}train.py --data {yaml_path}  --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --hyp {hyp_path}')

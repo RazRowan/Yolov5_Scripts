@@ -12,11 +12,13 @@ import numpy as np
 from sklearn.model_selection import KFold
 import configparser
 import print_dir
+from random_seed import random_seed
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
 config.read('config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
+scripts_path = config.get('paths', 'scripts_path')
 training_data_path = config.get('paths', 'training_data_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
 
@@ -40,21 +42,6 @@ def saveYaml(path):
     print("names: ['blue', 'green']")
     f.close()
     sys.stdout = sys.__stdout__
-
-# Generates a random seed, taking in a project name and length for the seed
-def random_seed(project_name, length):
-    # Define the characters that will be used
-    characters = string.digits
-
-    # Generate the random seed string
-    seed_string = ''.join(random.choice(characters) for i in range(length))
-
-    # Write seed to file
-    with open(project_name + "_fold-random-seed", 'w') as f:
-        f.write(seed_string)
-    f.close()
-
-    return seed_string
 
 # Print most recent files in training_data directory
 print_dir.print_files_path(path=training_data_path, num_of_files=num_of_files)
