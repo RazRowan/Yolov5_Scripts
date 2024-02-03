@@ -22,7 +22,7 @@ scripts_path = config.get('paths', 'scripts_path')
 training_data_path = config.get('paths', 'training_data_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
 
-# Saves either images or labels from the original directory to the new fold directory    
+# Saves either images or labels from the original directory to the new fold directory
 def saveFiles(fold_set, original_path, new_path):
     for index in fold_set:
         os.system("cp " + original_path + "/train/images/" + image_array[index] + " " + new_path + "/images/")
@@ -54,7 +54,7 @@ num_folds=input("How many folds should be created? (ex: 5) \n>")
 # Get seed for random assignment
 seed = int(input("Please enter a seed for the random assignment (or -1 for new seed): "))
 if seed == -1:
-    seed = int(random_seed(directory_name, 8))
+    seed = int(random_seed(directory_name, 8, "fold"))
 print("Using (" + str(seed) + ") as the random seed.")
 
 # Creating variables to access the images/labels of original dir

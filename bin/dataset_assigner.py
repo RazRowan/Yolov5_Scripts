@@ -86,7 +86,7 @@ def assign(path_to_project, dataset_folder, per_train, per_valid, per_test):
            dataset_name = os.path.basename(path_to_project[:-1])
         else:
            dataset_name = os.path.basename(path_to_project)
-        seed = random_seed(dataset_name, 8)
+        seed = random_seed(dataset_name, 8, "dataset_assigner")
     print("Using (" + str(seed) + ") as the random seed.")
 
     # Seed our random

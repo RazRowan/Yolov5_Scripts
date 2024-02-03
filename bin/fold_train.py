@@ -32,10 +32,10 @@ num_epochs=input("Enter the number of epochs to train with (ex: 300): \n>")
 main_set_path=f"{training_data_path}{main_set_name}/"
 
 for i in range(int(num_folds)):
-    run_name=f"{main_set_name}/Fold{i}"
-    fold_path=f"{main_set_path}/Fold{i}/"
+    run_name=f"{main_set_name}/Fold{i + 1}"
+    fold_path=f"{main_set_path}/Fold{i + 1}/"
     yaml_path=f"{fold_path}data.yaml"
 
     os.system(f"nohup python {yolov5_path}train.py --data {yaml_path} --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --hyp {hyp_path} --save-period 50  &")
 
-    print(f"\nFold{i} training started...\n")
+    print(f"\nFold{i + 1} training started...\n")
