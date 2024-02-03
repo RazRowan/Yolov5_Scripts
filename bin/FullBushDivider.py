@@ -57,8 +57,9 @@ img_dim = 640
 print_dir.print_files_path(path=training_data_path, num_of_files=num_of_files)
 
 # Path to the YOLOv5 blueberry annotations (directory should contain an images and labels folder that was exported from Roboflow)
-dir_path = training_data_path + input('What is the dataset you want to split into tiles? \n>')
-folder_name = input('Enter the name of the resulting folder (ex: Merged_80): \n>')
+dataset_name = input('What is the name of the dataset to split? \n>')
+dir_path = training_data_path + dataset_name
+folder_name = f"{dataset_name}_{img_dim}x{img_dim}"
 
 # Make directory if necessary
 new_dir_path = os.path.dirname(dir_path) + "/"

@@ -29,7 +29,7 @@ batch_size=input("Enter the batch-size to train with (ex: 16): \n>")
 num_epochs=input("Enter the number of epochs to train with (ex: 300): \n>")
 
 # Additional var for naming Fold dirs
-main_set_path=f"{training_data_path}main_set_name/"
+main_set_path=f"{training_data_path}{main_set_name}/"
 
 for i in range(int(num_folds)):
     run_name=f"{main_set_name}/Fold{i}"
