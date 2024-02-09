@@ -7,12 +7,12 @@
 
 import configparser
 import os
-from print_dir import print_files_path
-from evaluate_datasets import evaluate_dataset
+from util.print_dir import print_files_path
+from util.evaluate_datasets import evaluate_dataset
 
 # Read from the config file
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('./util/config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
 training_data_path = config.get('paths', 'training_data_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
