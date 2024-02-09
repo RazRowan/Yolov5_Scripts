@@ -27,8 +27,9 @@ if evaluate_dataset(path_to_dataset=f"{training_data_path}{dataset_name}/", type
     yaml_path=f"{training_data_path}{dataset_name}/data.yaml"
     batch_size=input("Enter the batch-size to train with (ex: 64): \n>")
     run_name=input("Enter the name of this training run: \n>")
-    num_epochs=input("Enter the number of epochs to train with (ex: 300): \n")
+    num_epochs=input("Enter the number of epochs to train with (ex: 300): \n>")
+    device_number=input("What GPU do you want to assign this task to? (0-7): \n>")
 
     # Run the train.py with inputs as parameters
-    os.system('nohup python {yolov5_path}train.py --data {yaml_path}  --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --hyp {hyp_path} &')
-    #os.system(f'python {yolov5_path}train.py --data {yaml_path}  --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --hyp {hyp_path}')
+    #os.system('nohup python {yolov5_path}train.py --data {yaml_path}  --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --hyp {hyp_path} &')
+    os.system(f'python {yolov5_path}train.py --data {yaml_path}  --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --device {device_number} --weights yolov5s.pt --hyp {hyp_path}')
