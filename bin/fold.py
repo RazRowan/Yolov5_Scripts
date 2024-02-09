@@ -11,12 +11,13 @@ import string
 import numpy as np
 from sklearn.model_selection import KFold
 import configparser
-import print_dir
-from random_seed import random_seed
+from util.print_dir import print_files_path
+from util.random_seed import random_seed
+from termcolor import colored, cprint
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('./util/config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
 scripts_path = config.get('paths', 'scripts_path')
 training_data_path = config.get('paths', 'training_data_path')
@@ -44,7 +45,7 @@ def saveYaml(path):
     sys.stdout = sys.__stdout__
 
 # Print most recent files in training_data directory
-print_dir.print_files_path(path=training_data_path, num_of_files=num_of_files)
+print_files_path(path=training_data_path, num_of_files=num_of_files)
 
 # Take input
 directory_name=input("What is the name of the dataset to split? \n>")
@@ -99,5 +100,5 @@ for fold, (train, valid) in enumerate(indices):
     print("Done!")
 
 print(f"All folds created and stored at: {dataset_path}")
-print("You should be ready to run the fold_train.py script!")
+print(colored("You should be ready to run the fold_train.py script!", 'green'))
 

@@ -8,12 +8,13 @@ import shutil
 import random
 import string
 import configparser
-import print_dir
-from random_seed import random_seed
+from util.print_dir import print_files_path
+from util.random_seed import random_seed
+from termcolor import colored
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('./util/config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
 training_data_path = config.get('paths', 'training_data_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
@@ -110,11 +111,11 @@ def assign(path_to_project, dataset_folder, per_train, per_valid, per_test):
         path_to_new_folder = path_to_project + "/test/"
         move_files(path_to_dataset, path_to_new_folder, num_test)
 
-    print("If you assigned some data to the train & valid folder, you COULD start training.")
-    print("NOTE: If you have not used the FullBushDivider.py script, please do that before training!")
+    print(colored("If you assigned some data to the train & valid folder, you COULD start training.", 'green'))
+    print(colored("NOTE: If you have not used the FullBushDivider.py script, please do that before training!", 'red'))
 
 # Print most recent files in training_data directory
-print_dir.print_files_path(path=training_data_path, num_of_files=num_of_files)
+print_files_path(path=training_data_path, num_of_files=num_of_files)
 
 # Run the main program with these parameters
 project_folder = training_data_path + input("What is the name of the dataset? \n>")

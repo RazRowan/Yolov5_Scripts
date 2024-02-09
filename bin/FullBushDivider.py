@@ -11,11 +11,12 @@ from PIL import Image
 import sys
 import pwd
 import configparser
-import print_dir
+from util.print_dir import print_files_path
+from termcolor import colored
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('./util/config.ini')
 training_data_path = config.get('paths', 'training_data_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
 
@@ -54,90 +55,93 @@ def saveYaml(dataset_name):
 img_dim = 640
 
 # Print most recent files in training_data directory
-print_dir.print_files_path(path=training_data_path, num_of_files=num_of_files)
+print_files_path(path=training_data_path, num_of_files=num_of_files)
 
 # Path to the YOLOv5 blueberry annotations (directory should contain an images and labels folder that was exported from Roboflow)
 dataset_name = input('What is the name of the dataset to split? \n>')
-dir_path = training_data_path + dataset_name
-folder_name = f"{dataset_name}_{img_dim}x{img_dim}"
+if not "640x640" in dataset_name:
+    dir_path = training_data_path + dataset_name
+    folder_name = f"{dataset_name}_{img_dim}x{img_dim}"
 
-# Make directory if necessary
-new_dir_path = os.path.dirname(dir_path) + "/"
+    # Make directory if necessary
+    new_dir_path = os.path.dirname(dir_path) + "/"
 
-try:
-    os.mkdir(new_dir_path + folder_name)
-except Exception as e:
-    print("Note: " + folder_name + " directory already exists")
+    try:
+        os.mkdir(new_dir_path + folder_name)
+    except Exception as e:
+        print("Note: " + folder_name + " directory already exists")
 
-folders = ['train', 'valid', 'test']
+    folders = ['train', 'valid', 'test']
 
-for folder in folders:
-    # Folder to test
-    if not os.path.exists(f"{dir_path}/{folder}/labels"):
-        print("----------------------------------------------")
-        print(f"There are no labels in the {folder} folder...")
-        print("----------------------------------------------")
-        continue
-    files = os.listdir(f"{dir_path}/{folder}/images")
-    pos = 0
+    for folder in folders:
+        # Folder to test
+        if not os.path.exists(f"{dir_path}/{folder}/labels"):
+            print("----------------------------------------------")
+            print(f"There are no labels in the {folder} folder...")
+            print("----------------------------------------------")
+            continue
+        files = os.listdir(f"{dir_path}/{folder}/images")
+        pos = 0
 
-    os.makedirs(new_dir_path + folder_name + "/" + folder + "/images")
-    os.makedirs(new_dir_path + folder_name + "/" + folder + "/labels")
+        os.makedirs(new_dir_path + folder_name + "/" + folder + "/images")
+        os.makedirs(new_dir_path + folder_name + "/" + folder + "/labels")
 
-    # Go through each annotation file
-    for file in files:
-        pos += 1
-        print("Converting " + str(file) + "...")
+        # Go through each annotation file
+        for file in files:
+            pos += 1
+            print("Converting " + str(file) + "...")
 
-        # Get path to blueberry annotation labels
-        data_path = f'{dir_path}/{folder}/labels/{file[:-3]}txt'
+            # Get path to blueberry annotation labels
+            data_path = f'{dir_path}/{folder}/labels/{file[:-3]}txt'
 
-        # Get the current image
-        image = Image.open(f'{dir_path}/{folder}/images/{file}')
+            # Get the current image
+            image = Image.open(f'{dir_path}/{folder}/images/{file}')
 
-        # Open blueberry annotation file
-        with open(data_path, newline='') as csvfile:
-            data = list(csv.reader(csvfile, delimiter=' ', quotechar='|'))
+            # Open blueberry annotation file
+            with open(data_path, newline='') as csvfile:
+                data = list(csv.reader(csvfile, delimiter=' ', quotechar='|'))
 
-        # Convert the file to XYXY coordinates
-        image_xyxy = YOLOv5ToXYXY(data)
-        x, y = image.size
-        x_scale = x / img_dim
-        y_scale = y / img_dim
+            # Convert the file to XYXY coordinates
+            image_xyxy = YOLOv5ToXYXY(data)
+            x, y = image.size
+            x_scale = x / img_dim
+            y_scale = y / img_dim
 
-        for i in range(img_dim, x, img_dim):
-            for j in range(img_dim, y, img_dim):
-                berries = []
-                low_x = (i - img_dim) / x
-                low_y = (j - img_dim) / y
-                high_x = i / x
-                high_y = j / y
+            for i in range(img_dim, x, img_dim):
+                for j in range(img_dim, y, img_dim):
+                    berries = []
+                    low_x = (i - img_dim) / x
+                    low_y = (j - img_dim) / y
+                    high_x = i / x
+                    high_y = j / y
 
-                for xyxy in image_xyxy:
-                    if (xyxy[3] + xyxy[1]) / 2 > low_x and (xyxy[3] + xyxy[1]) / 2 < high_x and (xyxy[4] + xyxy[2]) / 2 > low_y and (xyxy[4] + xyxy[2]) / 2 < high_y:
-                        berries.append(xyxy)
+                    for xyxy in image_xyxy:
+                        if (xyxy[3] + xyxy[1]) / 2 > low_x and (xyxy[3] + xyxy[1]) / 2 < high_x and (xyxy[4] + xyxy[2]) / 2 > low_y and (xyxy[4] + xyxy[2]) / 2 < high_y:
+                            berries.append(xyxy)
 
-                im = image.crop((i - img_dim, j - img_dim, i, j))
+                    im = image.crop((i - img_dim, j - img_dim, i, j))
 
-                #if not berries:
-                    #print(file)
-                    #im.save(f"output_berries/empty/{file[:-3]}{i - img_dim}.{j - img_dim}.jpg")
+                    #if not berries:
+                        #print(file)
+                        #im.save(f"output_berries/empty/{file[:-3]}{i - img_dim}.{j - img_dim}.jpg")
 
-                # Save output in YOLOv5 format
-                with open(new_dir_path + folder_name + "/" + folder + "/labels/" + str(i - img_dim) + "." + str(j - img_dim) + "." + file[:-3] + "txt", 'w') as f:
-                    for berry in berries:
-                        berry[1] = max(0, berry[1])
-                        berry[2] = max(0, berry[2])
-                        berry[3] = min(1, berry[3])
-                        berry[4] = min(1, berry[4])
-                        f.write(f"{berry[0]} {((berry[3] + berry[1]) / 2 - low_x) * x_scale} {((berry[4] + berry[2]) / 2 - low_y) * y_scale} {(berry[3] - berry[1]) * x_scale} {(berry[4] - berry[2]) * y_scale}\n")    
+                    # Save output in YOLOv5 format
+                    with open(new_dir_path + folder_name + "/" + folder + "/labels/" + str(i - img_dim) + "." + str(j - img_dim) + "." + file[:-3] + "txt", 'w') as f:
+                        for berry in berries:
+                            berry[1] = max(0, berry[1])
+                            berry[2] = max(0, berry[2])
+                            berry[3] = min(1, berry[3])
+                            berry[4] = min(1, berry[4])
+                            f.write(f"{berry[0]} {((berry[3] + berry[1]) / 2 - low_x) * x_scale} {((berry[4] + berry[2]) / 2 - low_y) * y_scale} {(berry[3] - berry[1]) * x_scale} {(berry[4] - berry[2]) * y_scale}\n")    
 
-                # Save cropped image
-                im.save(new_dir_path + folder_name + "/" + folder + "/images/" + str(i - img_dim) + "." + str(j - img_dim) + "." + str(file))
-    print("------------------------------")
-    print("Finished with " + folder + " !")
-    print("------------------------------")
-print("If there is validation data for this dataset, this dataset is now ready to train!")
-print("If you are doing cross-validation, you should now split this dataset with the fold.py script.")
+                    # Save cropped image
+                    im.save(new_dir_path + folder_name + "/" + folder + "/images/" + str(i - img_dim) + "." + str(j - img_dim) + "." + str(file))
+        print("------------------------------")
+        print(colored(f"Finished with {folder} !", 'green'))
+        print("------------------------------")
+    print(colored("If there is validation data for this dataset, this dataset is now ready to train!", 'green'))
+    print(colored("If you are doing cross-validation, you should now split this dataset with the fold.py script.", 'red'))
 
-saveYaml(folder_name)
+    saveYaml(folder_name)
+else:
+    print(colored("This dataset is already split into 640x640 tiles!", 'red'))

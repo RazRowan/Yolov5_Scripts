@@ -8,7 +8,7 @@ import os
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('./util/config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
 scripts_path = config.get('paths', 'scripts_path')
 training_data_path = config.get('paths', 'training_data_path')

@@ -8,7 +8,8 @@ import sys
 import os
 import numpy as np
 import configparser
-import print_dir
+from util.print_dir import print_files_path
+from util.evalulate_datasets import evaluate_dataset
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
@@ -18,16 +19,18 @@ train_run_path = config.get('paths', 'train_run_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
 
 # Print most recent files in validation_data directory
-print_dir.print_files_path(path=validation_data_path, num_of_files=num_of_files)
+print_files_path(path=validation_data_path, num_of_files=num_of_files)
 
 # Paths input
-validation_path= validation_data_path + input("What is the name of the validation dataset you want to use? \n>") + "/data.yaml"
-weight_path= train_run_path + input("Enter the path of the weight file being used (from /runs/train/, ex: [DATASET]/[FOLD#]/): \n>") + "weights/best.pt"
+dataset_name = input("What is the name of the validation dataset you want to use? \n>")
+if 
+validation_path = f"{validation_data_path}{dataset_name}/data.yaml"
+weight_path = train_run_path + input("Enter the path of the weight file being used (from /runs/train/, ex: [DATASET]/[FOLD#]/): \n>") + "weights/best.pt"
 
 # Parameters input
-img_size=int(input("Enter the inference image size: (ex: 3200): \n>"))
-batch_size=int(input("Enter the batch-size to validate with (ex: 16): \n>"))
-run_name=input("Enter the name of the run (ex: DRONE_MAIN_SET_20o30s_[Drone/Handheld]): \n>")
+img_size = int(input("Enter the inference image size: (ex: 3200): \n>"))
+batch_size = int(input("Enter the batch-size to validate with (ex: 16): \n>"))
+run_name = input("Enter the name of the run (ex: DRONE_MAIN_SET_20o30s_[Drone/Handheld]): \n>")
 
 # Create the command for validation
 cmd = "python ../val.py   --data {0} \
