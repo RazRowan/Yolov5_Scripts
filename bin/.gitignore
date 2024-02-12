@@ -11,6 +11,7 @@ __pycache__/
 
 # Nohup files
 nohup.out
+.nohup*
 
 # Seeds
 seeds/
