@@ -11,9 +11,10 @@ import string
 import numpy as np
 from sklearn.model_selection import KFold
 import configparser
+from termcolor import colored, cprint
 from util.print_dir import print_files_path
 from util.random_seed import random_seed
-from termcolor import colored, cprint
+from util.check_repo import check_for_updates
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
@@ -22,6 +23,11 @@ yolov5_path = config.get('paths', 'yolov5_path')
 scripts_path = config.get('paths', 'scripts_path')
 training_data_path = config.get('paths', 'training_data_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
+update_repo_automatically = config.getboolean('parameters', 'update_repo_automatically')
+
+# Pull down changes to repo
+if update_repo_automatically:
+    check_for_updates(scripts_path)
 
 # Saves either images or labels from the original directory to the new fold directory
 def saveFiles(fold_set, original_path, new_path):

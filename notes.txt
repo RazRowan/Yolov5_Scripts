@@ -1,0 +1,11 @@
+If you're using nano like I am, and you ever need to highlight many lines for indenting/outdenting:
+1. Create ~/.nanorc
+2. Write the following in the file: 
+set tabsize 4
+set tabstospaces
+3. source ~/.nanorc
+4. Go to the file you want to indent/outdent
+5. Go to the first line and set a marker (Alt+A)
+6. Go to the last line, and indent/outdent with (Esc+} \ Esc+{)
+7. Remove marker with Esc+A
+8. Save file and exit

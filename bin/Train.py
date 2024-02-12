@@ -13,6 +13,11 @@ config.read('./util/config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
 training_data_path = config.get('paths', 'training_data_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
+update_repo_automatically = config.getboolean('parameters', 'update_repo_automatically')
+
+# Pull down changes to repo
+if update_repo_automatically:
+    check_for_updates(scripts_path)
 
 # Variable for the hyperparameters being used
 hyp_path=f"{yolov5_path}data/hyps/hyp.scratch-low.yaml"

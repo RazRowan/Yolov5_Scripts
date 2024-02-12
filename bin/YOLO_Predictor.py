@@ -11,6 +11,8 @@ from PIL import Image
 import math
 from ultralytics import YOLO
 import numpy as np
+import configparser
+from util.check_repo import check_for_updates
 
 def get_username():
     return pwd.getpwuid(os.getuid())[0]
@@ -19,6 +21,11 @@ def get_username():
 config = configparser.ConfigParser()
 config.read('config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
+update_repo_automatically = config.getboolean('parameters', 'update_repo_automatically')
+
+# Pull down changes to repo
+if update_repo_automatically:
+    check_for_updates(scripts_path)
 
 # INPUTS
 change_parameters = input("Do you want to use different parameters for this run? (y/n)\n>")

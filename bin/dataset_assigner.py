@@ -8,16 +8,23 @@ import shutil
 import random
 import string
 import configparser
+from termcolor import colored
 from util.print_dir import print_files_path
 from util.random_seed import random_seed
-from termcolor import colored
+from util.check_repo import check_for_updates
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
 config.read('./util/config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
+scripts_path = config.get('paths', 'scripts_path')
 training_data_path = config.get('paths', 'training_data_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
+update_repo_automatically = config.getboolean('parameters', 'update_repo_automatically')
+
+# Pull down changes to repo
+if update_repo_automatically:
+    check_for_updates(scripts_path)
 
 # Assign is the main method that will assign files to specific train/valid/test folders
 def assign(path_to_project, dataset_folder, per_train, per_valid, per_test):

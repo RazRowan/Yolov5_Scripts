@@ -11,14 +11,20 @@ from PIL import Image
 import sys
 import pwd
 import configparser
-from util.print_dir import print_files_path
 from termcolor import colored
+from util.print_dir import print_files_path
+from util.check_repo import check_for_updates
 
 # Read the current brightness from the config file
 config = configparser.ConfigParser()
 config.read('./util/config.ini')
 training_data_path = config.get('paths', 'training_data_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
+update_repo_automatically = config.getboolean('parameters', 'update_repo_automatically')
+
+# Pull down changes to repo
+if update_repo_automatically:
+    check_for_updates(scripts_path)
 
 def get_username():
     return pwd.getpwuid(os.getuid())[0]
