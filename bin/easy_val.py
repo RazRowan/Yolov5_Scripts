@@ -17,6 +17,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 validation_data_path = config.get('paths', 'validation_data_path')
 train_run_path = config.get('paths', 'train_run_path')
+scripts_path = config.get('paths', 'scripts_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
 update_repo_automatically = config.getboolean('parameters', 'update_repo_automatically')
 

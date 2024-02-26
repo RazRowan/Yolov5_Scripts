@@ -21,6 +21,7 @@ def get_username():
 config = configparser.ConfigParser()
 config.read('config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
+scripts_path = config.get('paths', 'scripts_path')
 update_repo_automatically = config.getboolean('parameters', 'update_repo_automatically')
 
 # Pull down changes to repo

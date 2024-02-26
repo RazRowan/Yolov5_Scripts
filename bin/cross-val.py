@@ -39,6 +39,9 @@ CONFIDENCE =[
 	open("../runs/train/" + set_name + "/Fold5/F1_value.txt").read()
 ]
 
+if os.path.exists("nohup.out"):
+    os.remove("nohup.out")
+
 for fold in range(NUM_FOLD):
 	print('FOLD NUMBER: ', fold + 1)
 	save_dir = set_name + "/Fold" + str(fold + 1)

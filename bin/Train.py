@@ -12,6 +12,7 @@ config = configparser.ConfigParser()
 config.read('./util/config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
 training_data_path = config.get('paths', 'training_data_path')
+scripts_path = config.get('paths', 'scripts_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
 update_repo_automatically = config.getboolean('parameters', 'update_repo_automatically')
 
@@ -34,7 +35,11 @@ if evaluate_dataset(path_to_dataset=f"{training_data_path}{dataset_name}/", type
     run_name=input("Enter the name of this training run: \n>")
     num_epochs=input("Enter the number of epochs to train with (ex: 300): \n>")
     device_number=input("What GPU do you want to assign this task to? (0-7): \n>")
+    weight_file=input("What size model are you training? (yolov5s.pt, yolov5m.pt, etc.): \n>")
+
+    if os.path.exists("nohup.out"):
+        os.remove("nohup.out")
 
     # Run the train.py with inputs as parameters
     #os.system('nohup python {yolov5_path}train.py --data {yaml_path}  --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --hyp {hyp_path} &')
-    os.system(f'python {yolov5_path}train.py --data {yaml_path}  --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --device {device_number} --weights yolov5s.pt --hyp {hyp_path}')
+    os.system(f'python {yolov5_path}train.py --data {yaml_path}  --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --device {device_number} --weights {yolov5_path}{weight_file} --hyp {hyp_path}')

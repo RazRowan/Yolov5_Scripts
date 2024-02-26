@@ -30,13 +30,13 @@ if update_repo_automatically:
     check_for_updates(scripts_path)
 
 # Saves either images or labels from the original directory to the new fold directory
-def saveFiles(fold_set, original_path, new_path):
+def saveFiles(fold_set, original_path, new_path, image_array, label_array):
     for index in fold_set:
         os.system("cp " + original_path + "/train/images/" + image_array[index] + " " + new_path + "/images/")
         os.system("cp " + original_path + "/train/labels/" + label_array[index] + " " + new_path + "/labels/")
 
 # Creates a data.yaml file (needed for train.py)
-def saveYaml(path):
+def saveYaml(path, classes=['blue', 'green']):
     f = open(path + "/data.yaml", 'w')
     sys.stdout = f
     if path[1] == ".":
@@ -45,66 +45,89 @@ def saveYaml(path):
     print("val: " + path + "/valid/images")
     print("test: " + path + "/test/images")
     print()
-    print("nc: 2")
-    print("names: ['blue', 'green']")
+    print(f"nc: {len(classes)}")
+    print(f"names: {classes}")
     f.close()
     sys.stdout = sys.__stdout__
 
-# Print most recent files in training_data directory
-print_files_path(path=training_data_path, num_of_files=num_of_files)
+# Fetches class data from parent dataset data.yaml
+def getClasses(file_path):
+    file_path=file_path + "data.yaml"
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
 
-# Take input
-directory_name=input("What is the name of the dataset to split? \n>")
-dataset_path=f"{training_data_path}{directory_name}/"
-num_folds=input("How many folds should be created? (ex: 5) \n>")
+            # Parse the content
+            for line in content.split('\n'):
+                if line.startswith('names:'):
+                    names_list = eval(line.split(':', 1)[1].strip())  # Convert the string to a list
+            return names_list
+    except OSError:
+        print("Data.yaml does not exist for this dataset! (Or the path is wrong)")
+        return None
 
-# Get seed for random assignment
-seed = int(input("Please enter a seed for the random assignment (or -1 for new seed): "))
-if seed == -1:
-    seed = int(random_seed(directory_name, 8, "fold"))
-print("Using (" + str(seed) + ") as the random seed.")
+def fold():
+    # Print most recent files in training_data directory
+    print_files_path(path=training_data_path, num_of_files=num_of_files)
 
-# Creating variables to access the images/labels of original dir
-image_dir = dataset_path + "train/images/"
-label_dir = dataset_path + "train/labels/"
+    # Take input
+    directory_name=input("What is the name of the dataset to split? \n>")
+    dataset_path=f"{training_data_path}{directory_name}/"
+    num_folds=input("How many folds should be created? (ex: 5) \n>")
 
-# Sort the files listen in these dirs
-image_array = sorted(os.listdir(image_dir))
-label_array = sorted(os.listdir(label_dir))
+    classes = getClasses(file_path=dataset_path)
+    if classes is None:
+        return
 
-### Use KFold and kf.split to split the image_array into indices.
-# The folding works by splitting the array into n lists of indices
-# that are evenly split. See sklearn KFold documentation for more.
-kf = KFold(n_splits=int(num_folds), shuffle=True, random_state=seed)
-indices = kf.split(image_array)
+    # Get seed for random assignment
+    seed = int(input("Please enter a seed for the random assignment (or -1 for new seed): "))
+    if seed == -1:
+        seed = int(random_seed(directory_name, 8, "fold"))
+    print("Using (" + str(seed) + ") as the random seed.")
 
-# For loop to create the folds for each n of splits (see kf above)
-for fold, (train, valid) in enumerate(indices):
+    # Creating variables to access the images/labels of original dir
+    image_dir = dataset_path + "train/images/"
+    label_dir = dataset_path + "train/labels/"
 
-    print("Creating Fold " + str(fold + 1) + "...")
+    # Sort the files listen in these dirs
+    image_array = sorted(os.listdir(image_dir))
+    label_array = sorted(os.listdir(label_dir))
 
-    # Create directories for each Fold
-    fold_path_name = dataset_path + "Fold" + str(fold + 1)
-    os.system("mkdir -p " + fold_path_name)
+    ### Use KFold and kf.split to split the image_array into indices.
+    # The folding works by splitting the array into n lists of indices
+    # that are evenly split. See sklearn KFold documentation for more.
+    kf = KFold(n_splits=int(num_folds), shuffle=True, random_state=seed)
+    indices = kf.split(image_array)
 
-    # Create directories for train and test
-    train_path_name = fold_path_name + "/train/"
-    os.system("mkdir -p " + train_path_name)
-    os.system("mkdir -p " + train_path_name + "images/")
-    os.system("mkdir -p " + train_path_name + "labels/")
+    # For loop to create the folds for each n of splits (see kf above)
+    for fold, (train, valid) in enumerate(indices):
 
-    valid_path_name = fold_path_name + "/valid/"
-    os.system("mkdir -p " + valid_path_name)
-    os.system("mkdir -p " + valid_path_name + "images/")
-    os.system("mkdir -p " + valid_path_name + "labels/")
+        print("Creating Fold " + str(fold + 1) + "...")
 
-    # Save Files in their respective dirs and create a data.yaml
-    saveFiles(train, dataset_path, train_path_name)
-    saveFiles(valid, dataset_path, valid_path_name)
-    saveYaml(fold_path_name)
+        # Create directories for each Fold
+        fold_path_name = dataset_path + "Fold" + str(fold + 1)
+        os.system("mkdir -p " + fold_path_name)
 
-    print("Done!")
+        # Create directories for train and test
+        train_path_name = fold_path_name + "/train/"
+        os.system("mkdir -p " + train_path_name)
+        os.system("mkdir -p " + train_path_name + "images/")
+        os.system("mkdir -p " + train_path_name + "labels/")
 
-print(f"All folds created and stored at: {dataset_path}")
-print(colored("You should be ready to run the fold_train.py script!", 'green'))
+        valid_path_name = fold_path_name + "/valid/"
+        os.system("mkdir -p " + valid_path_name)
+        os.system("mkdir -p " + valid_path_name + "images/")
+        os.system("mkdir -p " + valid_path_name + "labels/")
 
+        # Save Files in their respective dirs and create a data.yaml
+        saveFiles(train, dataset_path, train_path_name, image_array, label_array)
+        saveFiles(valid, dataset_path, valid_path_name, image_array, label_array)
+        saveYaml(fold_path_name,)
+
+        print("Done!")
+
+    print(f"All folds created and stored at: {dataset_path}")
+    print(colored("You should be ready to run the fold_train.py script!", 'green'))
+
+if __name__ == "__main__":
+    fold()

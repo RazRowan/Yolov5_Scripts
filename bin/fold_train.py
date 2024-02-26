@@ -16,6 +16,7 @@ config = configparser.ConfigParser()
 config.read('./util/config.ini')
 yolov5_path = config.get('paths', 'yolov5_path')
 training_data_path = config.get('paths', 'training_data_path')
+scripts_path = config.get('paths', 'scripts_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
 update_repo_automatically = config.getboolean('parameters', 'update_repo_automatically')
 
@@ -39,9 +40,12 @@ num_epochs=input("Enter the number of epochs to train with (ex: 300): \n>")
 # Additional var for naming Fold dirs
 main_set_path=f"{training_data_path}{main_set_name}/"
 
+if os.path.exists("nohup.out"):
+    os.remove("nohup.out")
+
 for i in range(int(num_folds)):
     fold_path=f"{main_set_path}Fold{i + 1}/"
-    if evaluate_dataset(path_to_dataset=f"{fold_path}", type_of_dataset="training"):
+    if evaluate_dataset(path_to_dataset=f"{fold_path}", type_of_dataset="training", needs_to_be_tiled=False):
         run_name=f"{main_set_name}/Fold{i + 1}"
         yaml_path=f"{fold_path}data.yaml"
 

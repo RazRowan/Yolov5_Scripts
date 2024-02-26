@@ -19,6 +19,7 @@ from util.check_repo import check_for_updates
 config = configparser.ConfigParser()
 config.read('./util/config.ini')
 training_data_path = config.get('paths', 'training_data_path')
+scripts_path = config.get('paths', 'scripts_path')
 num_of_files = int(config.get('parameters', 'default_num_of_files'))
 update_repo_automatically = config.getboolean('parameters', 'update_repo_automatically')
 
