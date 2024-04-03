@@ -49,6 +49,6 @@ for i in range(int(num_folds)):
         run_name=f"{main_set_name}/Fold{i + 1}"
         yaml_path=f"{fold_path}data.yaml"
 
-        os.system(f"nohup python {yolov5_path}train.py --data {yaml_path} --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --hyp {hyp_path} --save-period 50 --device {i + 1}  &")
+        os.system(f"nohup python {yolov5_path}train.py --data {yaml_path} --batch-size={batch_size} --name {run_name} --epochs={num_epochs} --hyp {hyp_path} --save-period 50 --device {(i + 1) % 8}  &")
 
         print(f"\nFold{i + 1} training started...\n")

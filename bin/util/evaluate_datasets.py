@@ -30,7 +30,7 @@ def evaluate_dataset(path_to_dataset, type_of_dataset, needs_to_be_tiled=True):
         # Otherwise, just look in dataset_name "/path/to/dataset_name/"
         data_in_tiles = "640x640" in dataset_name
 
-    if not needs_to_be_tiled and data_in_tiles:
+    if needs_to_be_tiled and not data_in_tiles:
         print(colored(f"{dataset_name} has NOT been split into tiles! Please perform this step before training!", 'red'))
         return False
 

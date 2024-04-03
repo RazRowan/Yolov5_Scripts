@@ -6,6 +6,7 @@ import configparser
 import os
 from util.print_dir import print_files_path
 from util.evaluate_datasets import evaluate_dataset
+from util.check_repo import check_for_updates
 
 # Read from the config file
 config = configparser.ConfigParser()
